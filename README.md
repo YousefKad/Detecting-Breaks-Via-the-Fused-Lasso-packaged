@@ -23,7 +23,6 @@
 - [Running the Simulations](#running-the-simulations)
 - [Data Generating Processes](#data-generating-processes)
 - [Module Reference](#module-reference)
-- [Results](#results)
 - [Citation](#citation)
 - [License](#license)
 
@@ -31,13 +30,13 @@
 
 ## Overview
 
-Standard panel data estimators assume that slope coefficients are constant over time. In practice, economic relationships frequently undergo **structural breaks** — abrupt shifts in regression coefficients — caused by policy changes, financial crises, or regime transitions.
+Standard panel data estimators assume slope coefficients are constant over time. In practice, economic relationships frequently undergo **structural breaks** — abrupt shifts in regression coefficients caused by policy changes, financial crises, or regime transitions.
 
 This repository implements a **two-step adaptive fused lasso** procedure that:
 
-1. Estimates an initial OLS coefficient path β̂^OLS across periods.
-2. Solves a penalised least-squares problem that shrinks consecutive differences `β_t − β_{t−1}` toward zero, automatically detecting and dating breaks.
-3. Selects the regularisation parameter λ via a data-driven **Information Criterion (IC)**.
+1. Estimates an initial OLS coefficient path $\hat{\beta}^{\text{OLS}}$ across periods.
+2. Solves a penalised least-squares problem that shrinks consecutive differences $\beta_t - \beta_{t-1}$ toward zero, automatically detecting and dating breaks.
+3. Selects the regularisation parameter $\lambda$ via a data-driven **Information Criterion (IC)**.
 
 The method is designed for panels with **fixed T** (small time dimension) and **large N**, where common factor structure induces cross-sectional dependence.
 
@@ -49,28 +48,55 @@ The method is designed for panels with **fixed T** (small time dimension) and **
 
 The observed panel follows:
 
-$$\tilde{y}_{it} = \tilde{x}_{it}' \beta_t + \tilde{u}_{it}, \quad i = 1, \ldots, N, \quad t = 1, \ldots, T$$
+```math
+\tilde{y}_{it} = \tilde{x}_{it}' \beta_t + \tilde{u}_{it},
+\qquad i = 1, \ldots, N, \quad t = 1, \ldots, T
+```
 
 where tildes denote cross-sectional demeaning to remove interactive fixed effects $\lambda_i' F_t$.
 
+---
+
 ### Adaptive Fused Lasso Objective
 
-$$\hat{\mathcal{B}}_T(\lambda) = \underset{\mathcal{B}_T}{\arg\min} \; \frac{1}{N} \sum_{i=1}^{N} \sum_{t=1}^{T} \left( \tilde{y}_{it} - \tilde{x}_{it}' \beta_t \right)^2 + \lambda \sum_{t=2}^{T} w_t \left\| \beta_t - \beta_{t-1} \right\|_2$$
+```math
+\hat{\mathcal{B}}_T(\lambda)
+= \underset{\mathcal{B}_T}{\arg\min}
+\; \frac{1}{N} \sum_{i=1}^{N} \sum_{t=1}^{T}
+\bigl(\tilde{y}_{it} - \tilde{x}_{it}' \beta_t \bigr)^2
++ \lambda \sum_{t=2}^{T} w_t \,\|\beta_t - \beta_{t-1}\|_2
+```
 
-with **adaptive weights** $w_t = \|\hat{\beta}_t^{\text{OLS}} - \hat{\beta}_{t-1}^{\text{OLS}}\|_2^{-2}$ that down-weight differences that are already large in the first stage (encouraging the lasso to break there).
+The **adaptive weights** are
+
+```math
+w_t = \|\hat{\beta}_t^{\text{OLS}} - \hat{\beta}_{t-1}^{\text{OLS}}\|_2^{-2}
+```
+
+down-weighting differences already large in the first stage, so the lasso preferentially breaks there.
+
+---
 
 ### Information Criterion
 
-The tuning parameter λ is selected by minimising:
+The tuning parameter $\lambda$ is selected by minimising:
 
-$$\text{IC}(\lambda) = \frac{1}{NT} \sum_{t=1}^{T} \left\| \tilde{y}_t - \tilde{X}_t \hat{\beta}_t(\lambda) \right\|_2^2 + \frac{\log N}{\sqrt{N}} \cdot p \cdot (\hat{m}(\lambda) + 1)$$
+```math
+\text{IC}(\lambda)
+= \frac{1}{NT} \sum_{t=1}^{T}
+\|\tilde{y}_t - \tilde{X}_t \hat{\beta}_t(\lambda)\|_2^2
++ \frac{\log N}{\sqrt{N}} \cdot p \cdot \bigl(\hat{m}(\lambda) + 1\bigr)
+```
+
+---
 
 ### DGP Structure (DATA3 — Main Specification)
 
 The richest DGP combines:
-- **AR(1) common factors**: $F_t = (1-\phi) + \phi F_{t-1} + \eta_t$
+
+- **AR(1) common factors:** $F_t = (1-\phi) + \phi F_{t-1} + \eta_t$
 - **Cross-sectional + temporal dependence** in idiosyncratic errors $\varepsilon_{it}$
-- **Factor-loaded regressors**: $X_{itk} = F_t' \lambda_{ik} + \nu_{itk}$
+- **Factor-loaded regressors:** $X_{itk} = F_t' \lambda_{ik} + \nu_{itk}$
 
 ---
 
@@ -87,7 +113,7 @@ Detecting-Breaks-Via-the-Fused-Lasso/
 │   └── utils.py                # Reporting, printing, plotting
 │
 ├── simulations/                # Monte Carlo scripts
-│   └── N25_T5_m1.py            # N=25, T=5, m=1 replication (this file)
+│   └── N25_T5_m1.py            # N=25, T=5, m=1 replication
 │
 ├── tests/                      # Pytest unit tests
 │   └── test_core.py
@@ -138,28 +164,28 @@ from src.estimator import Optimize
 from src.ic import information_criterion
 from src.utils import plot_ic_curve, plot_beta_path
 
-# --- Parameters ---
+# Parameters
 n, T, p, m, r = 25, 5, 4, 1, 5
 
-# --- Generate data ---
+# Generate data
 data = DATA3(r=r, m=m, T=T, n=n, p=p, phi=0.8, phi_1=0.4, pi=0.4)
 X, y, beta_true, u, eps, F, y_tilde, u_tilde, X_mean, X_tilde = data.DGP1()
 
-# --- Select λ via IC ---
+# Select λ via IC
 lam_grid = np.logspace(-3, 3, 50)
 IC_vec, m_breaks, IC_min, lam_idx, lam_star, m_star = information_criterion(
     lam_grid, y_tilde, X_tilde, p, T, n
 )
 
-# --- Estimate ---
+# Estimate
 opt = Optimize(p, T, n)
 b_ols, _, _        = opt.OLS(X_tilde, y_tilde)
 b_hat, m_hat, _, _ = opt.FGLS(X_tilde, y_tilde, b_ols, lam_star)
 
-print(f"True breaks: {m}  |  Estimated breaks: {m_hat}")
-print(f"Optimal λ*: {lam_star:.4f}")
+print(f"True breaks: {m}  |  Estimated: {m_hat}")
+print(f"Optimal λ*:  {lam_star:.4f}")
 
-# --- Visualise ---
+# Visualise
 plot_ic_curve(lam_grid, IC_vec, m_breaks, lam_star, save_path="figures/ic.pdf")
 plot_beta_path(beta_true, b_hat, save_path="figures/beta_path.pdf")
 ```
@@ -168,101 +194,71 @@ plot_beta_path(beta_true, b_hat, save_path="figures/beta_path.pdf")
 
 ## Running the Simulations
 
-The file `simulations/N25_T5_m1.py` reproduces the **N=25, T=5, m=1** Monte Carlo experiment from the paper.
-
 ```bash
-# From the repository root
 python -m simulations.N25_T5_m1
 ```
 
-**Configurable parameters** (edit at the top of the file):
+**Configurable parameters:**
 
-| Variable   | Default | Description                              |
-|------------|---------|------------------------------------------|
-| `SIM`      | 1000    | Number of Monte Carlo replications       |
-| `SEED`     | None    | RNG seed (set integer for reproducibility)|
-| `PHI`      | 0.8     | AR(1) persistence of common factors      |
-| `PHI_1`    | 0.4     | Temporal + spatial weight on ε           |
-| `PI`       | 0.4     | Temporal + spatial weight on ν (X noise) |
-| `LAM_GRID` | logspace(-3,3,50) | λ search grid              |
-
-Expected output:
-
-```
-============================================================
-  MONTE CARLO SUMMARY — Fused Lasso Break Detection
-============================================================
-  Dimensions : n=25, T=5, p=4, r=5
-  Replications: 1000  (failed: 0)
-============================================================
-
-  True β matrix (p × T):
-  ...
-  Average estimated β̂ matrix (p × T):
-  ...
-
-  True breaks     m   = 1
-  Average m̂          = 0.9XXX
-  # wrong break count = XX  (X.X%)
-  # wrong break date  = XX  (X.X%)
-  Mean Frobenius Error (MFE) = 0.XXXXXX
-============================================================
-```
-
----
-
-## Running the Tests
-
-```bash
-pytest tests/ -v
-```
+| Variable    | Default           | Description                               |
+|-------------|-------------------|-------------------------------------------|
+| `SIM`       | 1000              | Monte Carlo replications                  |
+| `SEED`      | `None`            | RNG seed (set integer for reproducibility)|
+| `PHI`       | 0.8               | AR(1) persistence of common factors       |
+| `PHI_1`     | 0.4               | Temporal + spatial weight on ε            |
+| `PI`        | 0.4               | Temporal + spatial weight on ν (X noise)  |
+| `LAM_GRID`  | `logspace(-3,3,50)` | λ search grid                           |
 
 ---
 
 ## Data Generating Processes
 
-| Class   | Errors                         | Regressors       | Notes                        |
-|---------|-------------------------------|------------------|------------------------------|
-| `DATA1` | i.i.d. N(0,1)                 | i.i.d. N(0,1)    | Baseline, no factor structure |
-| `DATA2` | Factor + i.i.d.               | i.i.d. N(0,1)    | Weak cross-sectional dep.    |
-| `DATA3` | AR(1) factors + spatial ε     | Factor-loaded X  | Main DGP (richest structure) |
+| Class   | Errors                     | Regressors      | Notes                         |
+|---------|----------------------------|-----------------|-------------------------------|
+| `DATA1` | i.i.d. N(0,1)              | i.i.d. N(0,1)   | Baseline, no factor structure |
+| `DATA2` | Factor + i.i.d.            | i.i.d. N(0,1)   | Weak cross-sectional dep.     |
+| `DATA3` | AR(1) factors + spatial ε  | Factor-loaded X | Main DGP (richest structure)  |
 
 Each class exposes four scenario methods:
 
-| Method  | Break configuration                                     |
-|---------|---------------------------------------------------------|
-| `DGP1`  | 1 break at `t* = floor(T/2)`                           |
-| `DGP2`  | 2 breaks at `floor(T/3)` and `floor(2T/3)`             |
-| `DGPA`  | Break at every period (β_t = t · 1_p)                  |
-| `DGPO`  | No breaks (β_t constant)                               |
+| Method | Break configuration                             |
+|--------|-------------------------------------------------|
+| `DGP1` | 1 break at $t^* = \lfloor T/2 \rfloor$         |
+| `DGP2` | 2 breaks at $\lfloor T/3 \rfloor$ and $\lfloor 2T/3 \rfloor$ |
+| `DGPA` | Break every period ($\beta_t = t \cdot \mathbf{1}_p$) |
+| `DGPO` | No breaks ($\beta_t$ constant)                  |
 
 ---
 
 ## Module Reference
 
 ### `src.dgp`
-- `DATA1(m, T, n, p)` — i.i.d. DGP
-- `DATA2(r, m, T, n, p)` — factor errors
-- `DATA3(r, m, T, n, p, phi, phi_1, pi)` — main DGP
+| Class | Arguments |
+|-------|-----------|
+| `DATA1` | `m, T, n, p` |
+| `DATA2` | `r, m, T, n, p` |
+| `DATA3` | `r, m, T, n, p, phi, phi_1, pi` |
 
 ### `src.estimator.Optimize(p, T, n)`
-- `.OLS(X, y)` → `(b_hat, status, value)`
-- `.FGLS(X, y, b_init, lam, break_tol=1e-3)` → `(b_hat, m_hat, status, value)`
-- `.NBOLS(X, y)` → `(b_cvx, b_analytic, status, value)`
+| Method | Returns |
+|--------|---------|
+| `.OLS(X, y)` | `(b_hat, status, value)` |
+| `.FGLS(X, y, b_init, lam, break_tol=1e-3)` | `(b_hat, m_hat, status, value)` |
+| `.NBOLS(X, y)` | `(b_cvx, b_analytic, status, value)` |
 
 ### `src.ic.information_criterion(lam_grid, y, X, p, T, n)`
-→ `(IC_vector, m_breaks, IC_min, lam_idx, lam_star, m_star)`
+Returns `(IC_vector, m_breaks, IC_min, lam_idx, lam_star, m_star)`
 
 ### `src.utils`
-- `print_mc_summary(...)` — formatted terminal output
-- `plot_ic_curve(lam_grid, IC_vector, m_breaks, lam_star)` → `Figure`
-- `plot_beta_path(beta_true, beta_hat)` → `Figure`
+| Function | Description |
+|----------|-------------|
+| `print_mc_summary(...)` | Formatted terminal output |
+| `plot_ic_curve(lam_grid, IC_vec, m_breaks, lam_star)` | IC curve figure |
+| `plot_beta_path(beta_true, beta_hat)` | Coefficient path figure |
 
 ---
 
 ## Citation
-
-If you use this code in your research, please cite:
 
 ```bibtex
 @article{kaddoura2023estimation,
@@ -280,4 +276,4 @@ If you use this code in your research, please cite:
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE) for details.
