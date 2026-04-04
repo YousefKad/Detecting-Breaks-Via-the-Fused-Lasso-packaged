@@ -102,7 +102,9 @@ The richest DGP combines:
 
 ## Repository Structure
 
-```
+## Repository structure
+
+```text
 Detecting-Breaks-Via-the-Fused-Lasso/
 │
 ├── src/                        # Core library
@@ -121,6 +123,9 @@ Detecting-Breaks-Via-the-Fused-Lasso/
 ├── docs/                       # LaTeX technical documentation
 │   └── documentation.tex
 │
+├── notebooks/                  # Jupyter notebook demos
+│   └── quickstart.ipynb        # Minimal end-to-end example
+│
 ├── figures/                    # Output figures (auto-generated)
 ├── results/                    # Output tables (auto-generated)
 │
@@ -128,7 +133,6 @@ Detecting-Breaks-Via-the-Fused-Lasso/
 ├── pyproject.toml              # Package metadata
 ├── LICENSE
 └── README.md
-```
 
 ---
 
