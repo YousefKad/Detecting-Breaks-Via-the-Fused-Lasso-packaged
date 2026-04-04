@@ -100,7 +100,6 @@ The richest DGP combines:
 
 ---
 
-## Repository Structure
 
 ## Repository structure
 
@@ -135,7 +134,7 @@ Detecting-Breaks-Via-the-Fused-Lasso/
 └── README.md
 
 ---
----
+
 ## Installation
 
 ### Option 1 — Conda (recommended)
