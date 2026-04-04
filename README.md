@@ -132,7 +132,7 @@ Detecting-Breaks-Via-the-Fused-Lasso/
 ├── pyproject.toml              # Package metadata
 ├── LICENSE
 └── README.md
-
+```
 ---
 
 ## Installation
