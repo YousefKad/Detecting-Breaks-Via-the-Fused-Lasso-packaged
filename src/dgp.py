@@ -1,22 +1,4 @@
-"""
-dgp.py — Data Generating Processes
-====================================
-Implements three DGP families used in the Monte Carlo study of
-Kaddoura & Westerlund (2023).
 
-DGP Families
-------------
-DATA1 : i.i.d. errors, no interactive effects.
-DATA2 : Factor-structured errors (weak cross-sectional dependence).
-DATA3 : AR(1) factors + spatially correlated idiosyncratic errors
-        (strong cross-sectional and temporal dependence; main DGP).
-
-Each class exposes four scenario methods:
-    DGP1  — 1 structural break (at floor(T/2))
-    DGP2  — 2 structural breaks (at floor(T/3) and floor(2T/3))
-    DGPA  — Break at every period  (maximal instability)
-    DGPO  — No breaks             (stable coefficients)
-"""
 
 import math
 import numpy as np
@@ -145,7 +127,7 @@ class DATA2:
         return self._outputs(X, beta, u, u_tilde, X_tilde, eps, lambd, F)
 
     def DGP2(self):
-        """Two structural breaks: β segments are 0, 1, 2 (scaled identity)."""
+        """Two structural breaks: beta segments are 0, 1, 2 (scaled identity)."""
         s1, s2  = math.floor(self.T / 3), math.floor(2 * self.T / 3)
         def _v(t):
             if t < s1:    return np.zeros(self.p)
@@ -282,9 +264,6 @@ class DATA3:
             beta[:, t] = segment_fn(t)
         return beta
 
-    # ------------------------------------------------------------------
-    # Public DGP methods
-    # ------------------------------------------------------------------
 
     def DGP1(self):
         """
