@@ -151,15 +151,6 @@ def plot_beta_path(
     beta_hat: np.ndarray,
     save_path: Optional[str] = None,
 ) -> plt.Figure:
-    """
-    Plot true vs. estimated coefficient paths over time.
-
-    Parameters
-    ----------
-    beta_true : array (p, T) — true coefficients
-    beta_hat  : array (p, T) — estimated coefficients
-    save_path : str or None
-    """
     p, T = beta_true.shape
     fig, axes = plt.subplots(p, 1, figsize=(8, 2 * p), sharex=True)
     if p == 1:
