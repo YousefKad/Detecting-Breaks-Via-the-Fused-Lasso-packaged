@@ -28,19 +28,7 @@ def break_correctly_located(
     p: int,
     break_tol: float = 1e-2,
 ) -> bool:
-    """
-    Return True if every true break date has a corresponding jump in b_hat
-    that exceeds break_tol.
 
-    Parameters
-    ----------
-    b_hat     : array (p, T) — estimated coefficients
-    m_hat     : int          — estimated number of breaks
-    m_true    : int          — true number of breaks
-    T         : int          — time dimension
-    p         : int          — number of regressors
-    break_tol : float        — norm threshold for a "located" break
-    """
     if m_true == 0:
         return True      # no breaks to locate
     if m_hat != m_true:
@@ -115,17 +103,7 @@ def plot_ic_curve(
     lam_star: float,
     save_path: Optional[str] = None,
 ) -> plt.Figure:
-    """
-    Dual-axis plot of IC(λ) and m̂(λ) against the tuning parameter grid.
 
-    Parameters
-    ----------
-    lam_grid  : 1-D array — λ values (x-axis, log scale)
-    IC_vector : 1-D array — IC values
-    m_breaks  : 1-D array — estimated break counts
-    lam_star  : float     — selected λ (will be marked)
-    save_path : str or None — if provided, save figure to this path
-    """
     fig, ax1 = plt.subplots(figsize=(7, 4))
 
     color_ic = "#1f77b4"
