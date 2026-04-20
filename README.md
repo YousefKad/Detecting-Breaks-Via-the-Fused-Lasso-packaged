@@ -22,8 +22,6 @@
 - [Running the Simulations](#running-the-simulations)
 - [Data Generating Processes](#data-generating-processes)
 - [Module Reference](#module-reference)
-- [Citation](#citation)
-- [License](#license)
 
 ---
 
