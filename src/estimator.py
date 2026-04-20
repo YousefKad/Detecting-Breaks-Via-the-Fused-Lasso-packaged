@@ -1,13 +1,9 @@
 """
-estimator.py — Fused Lasso Estimator and Benchmarks
-=====================================================
-Implements the adaptive fused lasso (FGLS) estimator and auxiliary
 least-squares methods described in Kaddoura & Westerlund (2023).
 
 Classes
 -------
 Optimize
-    Container for all estimation routines.
 
 Methods
 -------
