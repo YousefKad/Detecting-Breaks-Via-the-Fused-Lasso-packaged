@@ -3,15 +3,6 @@ ic.py — Information Criterion for Tuning Parameter Selection
 =============================================================
 Implements the penalised IC used to select the regularisation
 parameter λ in the adaptive fused lasso estimator.
-
-The IC balances in-sample fit against model complexity (measured by
-the estimated number of breaks m̂):
-
-    IC(λ) = (1/(nT)) Σ_t ‖y_t − X_t β̂_t(λ)‖²
-             + (log n / √n) · p · (m̂(λ) + 1)
-
-The optimal λ* minimises IC(λ) over a log-spaced grid.
-
 Reference
 ---------
 Kaddoura, Y. and Westerlund, J. (2023), Section 3.2.
@@ -37,25 +28,6 @@ def information_criterion(
     """
     Compute the IC over a grid of regularisation parameters and return
     the optimal λ*.
-
-    Parameters
-    ----------
-    lam_grid  : 1-D array   — candidate values of λ (e.g. np.logspace(-3, 3, 50))
-    y         : array (T, n)
-    X         : array (T, n, p)
-    p         : int — number of regressors
-    T         : int — time dimension
-    n         : int — cross-sectional dimension
-    break_tol : float — norm threshold for counting a break
-
-    Returns
-    -------
-    IC_vector    : array (L,)  — IC value for each λ in the grid
-    m_breaks     : array (L,)  — estimated break count for each λ
-    IC_min       : float       — minimum IC value
-    lam_idx      : int         — index of optimal λ in lam_grid
-    lam_star     : float       — optimal regularisation parameter
-    m_star       : float       — estimated number of breaks at λ*
     """
     L         = len(lam_grid)
     IC_vector = np.full(L, np.inf)
