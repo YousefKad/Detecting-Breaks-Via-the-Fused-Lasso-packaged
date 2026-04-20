@@ -16,14 +16,6 @@ Each class exposes four scenario methods:
     DGP2  — 2 structural breaks (at floor(T/3) and floor(2T/3))
     DGPA  — Break at every period  (maximal instability)
     DGPO  — No breaks             (stable coefficients)
-
-Notation (consistent with the paper)
--------------------------------------
-n  : cross-sectional dimension
-T  : time dimension (fixed)
-p  : number of regressors
-m  : number of breaks
-r  : number of common factors
 """
 
 import math
@@ -38,13 +30,6 @@ class DATA1:
     """
     Simplest DGP: independent normal regressors and errors,
     no latent factor structure.
-
-    Parameters
-    ----------
-    m : int   — number of breaks (used internally for DGPA)
-    T : int   — time dimension
-    n : int   — cross-sectional dimension
-    p : int   — number of slope coefficients
     """
 
     def __init__(self, m: int, T: int, n: int, p: int) -> None:
@@ -109,16 +94,6 @@ class DATA2:
     """
     Panel DGP with a latent factor structure in the errors.
 
-    The error is u_{it} = F_t' λ_i + ε_{it}, so there is
-    cross-sectional dependence but the regressors are still i.i.d.
-
-    Parameters
-    ----------
-    r : int   — number of latent factors
-    m : int   — number of breaks (for DGPA bookkeeping)
-    T : int   — time dimension
-    n : int   — cross-sectional dimension
-    p : int   — number of slope coefficients
     """
 
     def __init__(self, r: int, m: int, T: int, n: int, p: int) -> None:
@@ -205,23 +180,6 @@ class DATA2:
 # ---------------------------------------------------------------------------
 
 class DATA3:
-    """
-    Main DGP of the paper. Combines:
-    - AR(1) common factors:  F_t = (1-φ) + φ F_{t-1} + η_t
-    - Spatial + temporal dependence in idiosyncratic component ε_{it}
-    - Factor-loaded regressors: X_{itk} = F_t' λ_{ik} + ν_{itk}
-
-    Parameters
-    ----------
-    r     : int   — number of latent factors
-    m     : int   — number of breaks
-    T     : int   — time dimension
-    n     : int   — cross-sectional dimension
-    p     : int   — number of slope coefficients
-    phi   : float — AR(1) persistence of common factors (e.g. 0.8)
-    phi_1 : float — AR(1) + spatial weight for idiosyncratic ε (e.g. 0.4)
-    pi    : float — AR(1) + spatial weight for regressor noise ν  (e.g. 0.4)
-    """
 
     def __init__(
         self,
@@ -331,9 +289,6 @@ class DATA3:
     def DGP1(self):
         """
         One structural break at t* = floor(T/2).
-
-        Pre-break:  β_t = 0 · 1_p
-        Post-break: β_t = 1 · 1_p
         """
         split = math.floor(self.T / 2)
         beta  = self._make_beta(
@@ -351,7 +306,7 @@ class DATA3:
         """
         Two structural breaks at t* = floor(T/3) and floor(2T/3).
 
-        Regime 0: β = 0·1_p,  Regime 1: β = 1·1_p,  Regime 2: β = 2·1_p
+        Regime 0: beta = 0·1_p,  Regime 1: beta = 1·1_p,  Regime 2: beta = 2·1_p
         """
         s1, s2 = math.floor(self.T / 3), math.floor(2 * self.T / 3)
 
@@ -371,7 +326,7 @@ class DATA3:
 
     def DGPA(self):
         """
-        Break at every period: β_t = t · 1_p (maximal instability).
+        Break at every period: beta_t = t · 1_p (maximal instability).
         """
         beta     = self._make_beta(lambda t: t * np.ones(self.p))
         F        = self._ar1_factors()
@@ -384,7 +339,7 @@ class DATA3:
 
     def DGPO(self):
         """
-        No breaks: β_t = 0 for all t (fully stable coefficients).
+        No breaks: beta_t = 0 for all t (fully stable coefficients).
         """
         beta     = np.zeros((self.p, self.T))
         F        = self._ar1_factors()
