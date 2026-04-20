@@ -1,10 +1,6 @@
 """
 ic.py — Information Criterion for Tuning Parameter Selection
 =============================================================
-Implements the penalised IC used to select the regularisation
-parameter λ in the adaptive fused lasso estimator.
-Reference
----------
 Kaddoura, Y. and Westerlund, J. (2023), Section 3.2.
 """
 
@@ -27,7 +23,7 @@ def information_criterion(
 ) -> Tuple[np.ndarray, np.ndarray, float, int, float, float]:
     """
     Compute the IC over a grid of regularisation parameters and return
-    the optimal λ*.
+    the optimallambda!!
     """
     L         = len(lam_grid)
     IC_vector = np.full(L, np.inf)
