@@ -2,7 +2,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white" alt="Python"/>
-  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"/>
   <img src="https://img.shields.io/badge/Solver-CVXPY%20%7C%20CLARABEL-orange" alt="Solver"/>
   <img src="https://img.shields.io/badge/Status-Research%20Code-lightgrey" alt="Status"/>
 </p>
@@ -261,22 +260,3 @@ Returns `(IC_vector, m_breaks, IC_min, lam_idx, lam_star, m_star)`
 
 ---
 
-## Citation
-
-```bibtex
-@article{kaddoura2023estimation,
-  title   = {Estimation of panel data models with random interactive effects
-             and multiple structural breaks when {T} is fixed},
-  author  = {Kaddoura, Yousef and Westerlund, Joakim},
-  journal = {Journal of Business \& Economic Statistics},
-  volume  = {41},
-  pages   = {778--790},
-  year    = {2023}
-}
-```
-
----
-
-## License
-
-MIT — see [LICENSE](LICENSE) for details.
