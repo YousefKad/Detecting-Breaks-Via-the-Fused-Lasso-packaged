@@ -12,10 +12,4 @@ dependencies:
       - cvxpy>=1.4
       - tabulate>=0.9
       - pytest>=8.0
-      - clarabel>=0.7   # default CVXPY open-source solver
-
-# ── Quick-start ────────────────────────────────────────────────────────────
-# conda env create -f environment.yml
-# conda activate fused-lasso-breaks
-# python -m simulations.N25_T5_m1
-# ──────────────────────────────────────────────────────────────────────────
+      - clarabel>=0.7   
