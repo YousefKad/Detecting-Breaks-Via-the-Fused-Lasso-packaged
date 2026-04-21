@@ -98,39 +98,6 @@ The richest DGP combines:
 ---
 
 
-## Repository structure
-
-```text
-Detecting-Breaks-Via-the-Fused-Lasso/
-│
-├── src/                        # Core library
-│   ├── __init__.py
-│   ├── dgp.py                  # Data generating processes (DATA1, DATA2, DATA3)
-│   ├── estimator.py            # OLS, FGLS (fused lasso), NBOLS
-│   ├── ic.py                   # Information criterion for λ selection
-│   └── utils.py                # Reporting, printing, plotting
-│
-├── simulations/                # Monte Carlo scripts
-│   └── N25_T5_m1.py            # N=25, T=5, m=1 replication
-│
-├── tests/                      # Pytest unit tests
-│   └── test_core.py
-│
-├── docs/                       # LaTeX technical documentation
-│   └── documentation.tex
-│
-├── notebooks/                  # Jupyter notebook demos
-│   └── quickstart.ipynb        # Minimal end-to-end example
-│
-├── figures/                    # Output figures (auto-generated)
-├── results/                    # Output tables (auto-generated)
-│
-├── environment.yml             # Conda environment
-├── pyproject.toml              # Package metadata
-├── LICENSE
-└── README.md
-```
----
 
 ## Installation
 
