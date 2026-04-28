@@ -99,7 +99,7 @@ pip install cvxpy numpy scipy matplotlib tabulate
 
 ---
 
-## Quick Start
+## Here is an example
 
 ```python
 import numpy as np
