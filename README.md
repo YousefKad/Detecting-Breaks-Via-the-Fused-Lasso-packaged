@@ -12,9 +12,7 @@
 
 ## Overview
 
-Standard panel data estimators assume slope coefficients are constant over time. In practice, economic relationships frequently undergo **structural breaks** — abrupt shifts in regression coefficients caused by policy changes, financial crises, or regime transitions.
-
-This repository implements a **two-step adaptive fused lasso** procedure.
+Standard panel data estimators assume slope coefficients are constant over time. In practice, economic relationships frequently undergo **structural breaks**  or abrupt shifts in regression coefficients caused by policy changes, financial crises, or regime transitions.
 
 ---
 
