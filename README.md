@@ -4,9 +4,9 @@
   <img src="https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white" alt="Python"/>
 </p>
 
-> **Python implementation** of the adaptive fused lasso estimator for detecting multiple structural breaks in panel data models with interactive fixed effects, based on:
->
-> **Kaddoura, Y. and Westerlund, J. (2023)**. *Estimation of panel data models with random interactive effects and multiple structural breaks when T is fixed.* Journal of Business & Economic Statistics, 41, 778–790.
+ **Python implementation** of the adaptive fused lasso estimator for detecting multiple structural breaks in panel data models with interactive fixed effects, based on:
+
+**Kaddoura, Y. and Westerlund, J. (2023)**. *Estimation of panel data models with random interactive effects and multiple structural breaks when T is fixed.* Journal of Business & Economic Statistics, 41, 778–790.
 
 ---
 
