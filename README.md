@@ -2,8 +2,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white" alt="Python"/>
-  <img src="https://img.shields.io/badge/Solver-CVXPY%20%7C%20CLARABEL-orange" alt="Solver"/>
-  <img src="https://img.shields.io/badge/Status-Research%20Code-lightgrey" alt="Status"/>
 </p>
 
 > **Python implementation** of the adaptive fused lasso estimator for detecting multiple structural breaks in panel data models with interactive fixed effects, based on:
@@ -12,30 +10,11 @@
 
 ---
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Methodology](#methodology)
-- [Repository Structure](#repository-structure)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Running the Simulations](#running-the-simulations)
-- [Data Generating Processes](#data-generating-processes)
-- [Module Reference](#module-reference)
-
----
-
 ## Overview
 
 Standard panel data estimators assume slope coefficients are constant over time. In practice, economic relationships frequently undergo **structural breaks** — abrupt shifts in regression coefficients caused by policy changes, financial crises, or regime transitions.
 
-This repository implements a **two-step adaptive fused lasso** procedure that:
-
-1. Estimates an initial OLS coefficient path $\hat{\beta}^{\text{OLS}}$ across periods.
-2. Solves a penalised least-squares problem that shrinks consecutive differences $\beta_t - \beta_{t-1}$ toward zero, automatically detecting and dating breaks.
-3. Selects the regularisation parameter $\lambda$ via a data-driven **Information Criterion (IC)**.
-
-The method is designed for panels with **fixed T** (small time dimension) and **large N**, where common factor structure induces cross-sectional dependence.
+This repository implements a **two-step adaptive fused lasso** procedure.
 
 ---
 
@@ -101,7 +80,7 @@ The richest DGP combines:
 
 ## Installation
 
-### Option 1 — Conda (recommended)
+### Option 1 — Conda
 
 ```bash
 git clone https://github.com/YousefKad/Detecting-Breaks-Via-the-Fused-Lasso.git
@@ -165,7 +144,7 @@ plot_beta_path(beta_true, b_hat, save_path="figures/beta_path.pdf")
 python -m simulations.N25_T5_m1
 ```
 
-**Configurable parameters:**
+**parameters:**
 
 | Variable    | Default           | Description                               |
 |-------------|-------------------|-------------------------------------------|
