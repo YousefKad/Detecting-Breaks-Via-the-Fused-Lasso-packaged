@@ -8,13 +8,13 @@
 
 **Kaddoura, Y. and Westerlund, J. (2023)**. *Estimation of panel data models with random interactive effects and multiple structural breaks when T is fixed.* Journal of Business & Economic Statistics, 41, 778–790.
 
----
+
 
 ## Overview
 
 Standard panel data estimators assume slope coefficients are constant over time. In practice, economic relationships frequently undergo **structural breaks**  or abrupt shifts in regression coefficients caused by policy changes, financial crises, or regime transitions.
 
----
+
 
 ## Methodology
 
@@ -49,7 +49,7 @@ w_t = \|\hat{\beta}_t^{\text{OLS}} - \hat{\beta}_{t-1}^{\text{OLS}}\|_2^{-2}
 
 down-weighting differences already large in the first stage, so the lasso preferentially breaks there.
 
----
+
 
 ### Information Criterion
 
